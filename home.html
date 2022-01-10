@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+  <script>
+    const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+    cities = []
+    // save all the cities in an array
+    fetch(endpoint)
+      .then(data => data.json())
+      .then(json => cities.push(...json));
+    // listener on the typebar to search the cities array for anything including the search input
+
+    function search(input, cities) {
+      return cities.filter(place => {
+        const regex = new RegExp(input, 'gi');
+        return place.city.match(regex) || place.state.match(regex);
+      });
+    };
+
+    function numberWithCommas(x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+    function displayMatches() {
+      // each search function result to be put into an array of results
+      const results = search(this.value, cities);
+      // this results array to be iterated over and 'suggestions' filled with HTML formatted cities
+      const html = results.map(result => {
+        const regex = new RegExp(this.value, 'gi');
+        const cityResult = result.city.replace(regex, `<span class='hl'>${this.value}</span>`);
+        const stateResult = result.state.replace(regex, `<span class='hl'>${this.value}</span>`);
+        return `
+      <li>
+        <span>${cityResult}, ${stateResult}</span>
+        <span>${numberWithCommas(result.population)}</span>
+      </li>
+    `;
+      }).join('');
+      suggestions.innerHTML = html;
+    };
+
+    const searchBar = document.querySelector('.search');
+    const suggestions = document.querySelector('.suggestions');
+    searchBar.addEventListener('keyup', displayMatches);
+
+  </script>
+</body>
+
+</html>
