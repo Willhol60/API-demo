@@ -1,0 +1,139 @@
+html {
+  box-sizing: border-box;
+  background: #ffc600;
+  font-size: 20px;
+  font-weight: 200;
+  font-family: 'Vesper Libre', serif;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+.search-form {
+  max-width: 400px;
+  margin: 50px auto;
+}
+
+input.search {
+  padding: 1rem;
+  text-align: center;
+  outline: 0;
+  border: 10px solid rgba(51, 51, 51, 0.5);
+  width: 120%;
+  left: -10%;
+  position: relative;
+  font-size: 1.5rem;
+}
+
+.suggestions {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  /*perspective: 20px;*/
+}
+
+.suggestions li {
+  background: white;
+  list-style: none;
+  border-bottom: 1px solid #D8D8D8;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.14);
+  margin: 0;
+  padding: 20px;
+  transition: background 0.2s;
+  display: flex;
+  justify-content: space-between;
+  text-transform: capitalize;
+}
+
+span.population {
+  font-size: 15px;
+}
+
+.hl {
+  background: #ffc600;
+}
+
+banner {
+  margin-bottom: 3em;
+  padding-bottom: 1em;
+  width: 100vw;
+  font-size: 2.5rem;
+  font-family: 'Bebas Neue', cursive;
+  z-index: 1;
+}
+
+/* ticker CSS */
+.ticker-wrap {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    overflow: hidden;
+    height: 4rem;
+    background-color: rgba(51, 51, 51, 1);
+    color: white;
+    padding-left: 100%;
+}
+.ticker {
+    display: inline-block;
+    height: 4rem;
+    /* line-height: 4rem; */
+    white-space: nowrap;
+    padding-right: 100%;
+    animation-name: ticker;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-duration: 15s;
+}
+.ticker__item {
+    display: inline-block;
+    padding: 0 2rem;
+    font-size: 2rem;
+}
+@keyframes ticker {
+    0% {
+        -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+
+    }
+    100% {
+        -webkit-transform: translate3d(-150%, 0, 0);
+                transform: translate3d(-150%, 0, 0);
+    }
+}
+
+.container {
+  position: relative;
+  height: 140vh;
+}
+
+#nasa {
+  /* margin-top: 6em; */
+  width: 30vw;
+  contain: content;
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+
+#nasa img {
+  height: 80vh;
+}
+
+#nasa h2 {
+  text-align: center;
+}
+
+#nasa h4 {
+  text-align: center;
+}
+
+#country {
+  /* margin-top: 6em; */
+  width: 30vw;
+  contain: content;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translate(0, -50%);
+}

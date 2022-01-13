@@ -3,39 +3,98 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Type Ahead 👀</title>
+  <title>WillHol's API Demo</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Vesper+Libre&display=swap');
+  </style>
 </head>
 
 <body>
+  <banner class="ticker-wrap">
+    <!-- scrolling Kanye quote -->
+    <div class="ticker">
+      <div class="ticker-item"></div>
+    </div>
+  </banner>
 
-  <form class="search-form">
-    <input type="text" class="search" placeholder="City or State">
-    <ul class="suggestions">
-      <li>Filter for a city</li>
-      <li>or a state</li>
-    </ul>
-  </form>
+  <div class='container'>
+    <div id='nasa'>
+      <h2>NASA's Photo of the Day</h2>
+      <img id='nasa-image' src="" alt="">
+      <h4 id='nasa-description'></h4>
+    </div>
+
+    <div id='country'>
+      <form class="search-form">
+        <input type="text" class="search" placeholder="Search for a country...">
+        <input type="submit" value="Go go go!">
+        <ul class="suggestions">
+          <li>Filter for a city</li>
+          <li>or a state</li>
+        </ul>
+      </form>
+    </div>
+  </div>
+
   <script>
-    const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+    //Kanye
+    const bannerContent = document.querySelector('.ticker-item')
+    const quote = fetch('https://api.kanye.rest/').then(data => data.json()).then(json => bannerContent.innerText = `Kanye said - "${json.quote}"`)
 
-    cities = []
-    // save all the cities in an array
-    fetch(endpoint)
+
+
+    // NASA
+    const nasaKey = '07pX1gfchfYNPZoAv8KiTpghaMt8Vudhg4qCvn4r';
+    const nasaEndpoint = `https://api.nasa.gov/planetary/apod?api_key=${nasaKey}`;
+    let lastImageDate;
+    const nasaEndpointDated = `https://api.nasa.gov/planetary/apod?api_key=${nasaKey}&date=${lastImageDate}`;
+
+    const nasaImage = document.getElementById('nasa-image');
+    const nasaDescription = document.getElementById('nasa-description');
+
+    fetch(nasaEndpoint)
       .then(data => data.json())
-      .then(json => cities.push(...json));
-    // listener on the typebar to search the cities array for anything including the search input
+      .then(json => {
+        if (json.media_type === 'image') {
+          nasaImage.src = json.url;
+          nasaDescription.innerText = json.title;
+          lastImageDate = new Date().toISOString().split('T')[0];
+        } else {
+          fetch(nasaEndpointDated)
+            .then(data => data.json())
+            .then(json => {
+              nasaImage.src = json.url;
+              nasaDescription.innerText = json.title;
+            });
+            console.log('using last published image');
+        }
+      })
 
-    function search(input, cities) {
-      return cities.filter(place => {
-        const regex = new RegExp(input, 'gi');
-        return place.city.match(regex) || place.state.match(regex);
-      });
-    };
+    // countries
+    let countryFlag;
+    let countryCapital;
+    let countryPop;
+
+    function fetchCountryInfo(event) {
+      event.preventDefault();
+      console.log(countryInput.value);
+      fetch(`https://restcountries.com/v3.1/name/${countryInput.value}`).then(data => data.json).then(json => console.log(json.name.official));
+    }
 
     function numberWithCommas(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
+
+
+    const searchForm = document.querySelector('.search-form');
+    const countryInput = document.querySelector('.search');
+    let countryEndpoint = `https://restcountries.com/v3.1/name/${countryInput.value}`;
+    const suggestions = document.querySelector('.suggestions');
+    searchForm.addEventListener('submit', fetchCountryInfo);
+
+
+    // cities JS30 type ahead
 
     function displayMatches() {
       // each search function result to be put into an array of results
@@ -55,9 +114,6 @@
       suggestions.innerHTML = html;
     };
 
-    const searchBar = document.querySelector('.search');
-    const suggestions = document.querySelector('.suggestions');
-    searchBar.addEventListener('keyup', displayMatches);
 
   </script>
 </body>
