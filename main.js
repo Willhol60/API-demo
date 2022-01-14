@@ -31,8 +31,8 @@ fetch(nasaEndpoint)
 // countries
 const countryName = document.querySelector('.country-first-line h2');
 const countryFlag = document.querySelector('.country-first-line img');
-const countryCapital = document.querySelector('.country-middle-line h4');
-const countryPop = document.querySelector('.country-last-line h4');
+const countryCapital = document.querySelector('#capital');
+const countryPop = document.querySelector('#population');
 const countryMap = document.querySelector('#map');
 
 function fetchCountryInfo(event) {
@@ -51,7 +51,7 @@ function numberWithCommas(x) {
 }
 
 const mapsEndpoint = (country) => {
-  return `https://maps.googleapis.com/maps/api/staticmap?center=${country}&zoom=3&size=600x300&key=${googleMapsKey}`;
+  return `https://maps.googleapis.com/maps/api/staticmap?center=${country}&zoom=3&size=600x300&markers=color:blue%${country}&key=${googleMapsKey}`;
 }
 
 const searchForm = document.querySelector('.search-form');
