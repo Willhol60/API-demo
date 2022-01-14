@@ -25,97 +25,33 @@
       <h4 id='nasa-description'></h4>
     </div>
 
+    <div id='about'>
+      <h1>This page uses 4 different API's to host a host of useful and/or interesting information</h1>
+    </div>
+
     <div id='country'>
       <form class="search-form">
         <input type="text" class="search" placeholder="Search for a country...">
-        <input type="submit" value="Go go go!">
-        <ul class="suggestions">
-          <li>Filter for a city</li>
-          <li>or a state</li>
-        </ul>
+        <input id='search-button' type="submit" value="Go go go!">
       </form>
+      <div class='country-display'>
+        <div class='country-first-line'>
+          <h2>Country</h2>
+          <img src="flag.png" alt="Country flag">
+        </div>
+        <div class="country-middle-line">
+          <h4>Capital</h4>
+        </div>
+        <div class="country-last-line">
+          <h4>Population</h4>
+        </div>
+        <img id='map' src="staticmap.png" alt="Country map">
+      </div>
     </div>
   </div>
 
-  <script>
-    //Kanye
-    const bannerContent = document.querySelector('.ticker-item')
-    const quote = fetch('https://api.kanye.rest/').then(data => data.json()).then(json => bannerContent.innerText = `Kanye said - "${json.quote}"`)
-
-
-
-    // NASA
-    const nasaKey = '07pX1gfchfYNPZoAv8KiTpghaMt8Vudhg4qCvn4r';
-    const nasaEndpoint = `https://api.nasa.gov/planetary/apod?api_key=${nasaKey}`;
-    let lastImageDate;
-    const nasaEndpointDated = `https://api.nasa.gov/planetary/apod?api_key=${nasaKey}&date=${lastImageDate}`;
-
-    const nasaImage = document.getElementById('nasa-image');
-    const nasaDescription = document.getElementById('nasa-description');
-
-    fetch(nasaEndpoint)
-      .then(data => data.json())
-      .then(json => {
-        if (json.media_type === 'image') {
-          nasaImage.src = json.url;
-          nasaDescription.innerText = json.title;
-          lastImageDate = new Date().toISOString().split('T')[0];
-        } else {
-          fetch(nasaEndpointDated)
-            .then(data => data.json())
-            .then(json => {
-              nasaImage.src = json.url;
-              nasaDescription.innerText = json.title;
-            });
-            console.log('using last published image');
-        }
-      })
-
-    // countries
-    let countryFlag;
-    let countryCapital;
-    let countryPop;
-
-    function fetchCountryInfo(event) {
-      event.preventDefault();
-      console.log(countryInput.value);
-      fetch(`https://restcountries.com/v3.1/name/${countryInput.value}`).then(data => data.json).then(json => console.log(json.name.official));
-    }
-
-    function numberWithCommas(x) {
-      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    }
-
-
-    const searchForm = document.querySelector('.search-form');
-    const countryInput = document.querySelector('.search');
-    let countryEndpoint = `https://restcountries.com/v3.1/name/${countryInput.value}`;
-    const suggestions = document.querySelector('.suggestions');
-    searchForm.addEventListener('submit', fetchCountryInfo);
-
-
-    // cities JS30 type ahead
-
-    function displayMatches() {
-      // each search function result to be put into an array of results
-      const results = search(this.value, cities);
-      // this results array to be iterated over and 'suggestions' filled with HTML formatted cities
-      const html = results.map(result => {
-        const regex = new RegExp(this.value, 'gi');
-        const cityResult = result.city.replace(regex, `<span class='hl'>${this.value}</span>`);
-        const stateResult = result.state.replace(regex, `<span class='hl'>${this.value}</span>`);
-        return `
-      <li>
-        <span>${cityResult}, ${stateResult}</span>
-        <span>${numberWithCommas(result.population)}</span>
-      </li>
-    `;
-      }).join('');
-      suggestions.innerHTML = html;
-    };
-
-
-  </script>
+  <script src='./api-keys.js'></script>
+  <script src='./main.js'></script>
 </body>
 
 </html>
